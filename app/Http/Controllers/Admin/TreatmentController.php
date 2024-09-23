@@ -16,7 +16,8 @@ class TreatmentController extends Controller
      */
     public function index()
     {
-        return view('admin.treatments.list');
+        $data['treatments'] = Treatment::get();
+        return view('admin.treatments.list',$data);
     }
 
     /**
@@ -83,6 +84,15 @@ class TreatmentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $istreatmentExist = Treatment::findorfail($id);//->delete();
+        $istreatmentDelete = $istreatmentExist->delete();
+        if ($istreatmentDelete) {
+            Toastr::success('Treatment deleted successfully.');
+            return redirect()->route('admin.treatments.index');
+        }
+        else {
+            Toastr::error('Something went wrong.');
+            return redirect()->back()->withInput();
+        }
     }
 }

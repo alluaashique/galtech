@@ -27,31 +27,24 @@
                             <table class="table table-striped table-bordered zero-configuration">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
+                                        <th>Treatment Name</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Tiger Nixon</td>
-                                        <td>System Architect</td>
-                                        <td>Edinburgh</td>
-                                        <td>61</td>
-                                        <td>2011/04/25</td>
-                                        <td>$320,800 <a href="fdsgbfdgb"> New fgbnfgb</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tiger Nixon</td>
-                                        <td>System Architect</td>
-                                        <td>Edinburgh</td>
-                                        <td>61</td>
-                                        <td>2011/04/25</td>
-                                        <td>$320,800</td>
-                                    </tr>
+                                    @foreach ($treatments as $item)
+                                        <tr>
+                                            <td>{{$item->name}}</td>
+                                            <td>
+                                                <a href="{{route('admin.treatments.edit',$item->id)}}"> Edit</a>
+                                                <a href="javascript:void(0)" class="delete" data-id="{{$item->id}}"> Delete</a>
+                                                <form action="{{route('admin.treatments.destroy',$item->id)}}" id="delete_{{$item->id}}" method="POST">
+                                                    @csrf
+                                                    @method("DELETE")
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
 
                                 </tbody>
 
@@ -66,4 +59,15 @@
 </div>
 <!-- #/ content body -->
 
+<script>
+$(document).ready(function() {
+    $('.delete').on('click', function() {
+        var id = $(this).data('id');
+        var form = $('#delete_' + id);
+        if (confirm("Are you sure you want to delete this treatment?")) {
+            form.submit();
+        }
+    });
+});
+</script>
 @endsection
