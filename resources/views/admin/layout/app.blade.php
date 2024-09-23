@@ -4,13 +4,25 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Ameen - Bootstrap Admin Dashboard HTML Template</title>
+    <title>Ameen - Admin Dashboard</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('admin_assets/images/favicon.png') }}">
     <link href="{{ asset('admin_assets/plugins/tables/css/datatable/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
     <link href="{{ asset('admin_assets/css/style.css') }}" rel="stylesheet">
     <script src="{{ asset('admin_assets/js/modernizr-3.6.0.min.js') }}"></script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+
+    <!-- jQuery (only include once) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
+<style>
+    #toast-container {
+        z-index: 99999999;
+    }
+</style>
 <body class="v-light vertical-nav fix-header fix-sidebar">
     <div id="preloader">
         <div class="loader">
@@ -111,6 +123,10 @@
         <!-- #/ sidebar -->
 
         @yield('content')
+
+        <script src="http://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+        <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+        {!! Toastr::message() !!}
 
         <!-- footer -->
         <div class="footer">
