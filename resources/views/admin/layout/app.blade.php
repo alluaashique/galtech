@@ -87,9 +87,9 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{route('admin.treatments.index')}}">
+                        <a href="{{route('admin.departments.index')}}">
                             <i class=" mdi mdi-view-dashboard"></i>
-                            <span class="nav-text">Treatments</span>
+                            <span class="nav-text">Departments</span>
                         </a>
                     </li>
                     <li>
