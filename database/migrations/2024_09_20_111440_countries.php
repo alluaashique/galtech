@@ -16,6 +16,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('countryCode');
             $table->string('name');
+            $table->tinyInteger('is_active')->default(1)->comment('1:active, 0:inactive');
             $table->timestamps();
             $table->softDeletes();
         });

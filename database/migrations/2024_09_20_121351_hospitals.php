@@ -26,7 +26,7 @@ return new class extends Migration
             $table->integer('hospital_type')->nullable();
             $table->integer('pathy_type')->nullable();
             $table->string('image')->nullable();
-            $table->tinyInteger('is_active')->default(1)->nullable();
+            $table->tinyInteger('is_active')->default(1)->comment('1:active, 0:inactive');
             $table->timestamps();
             $table->softDeletes();
         });

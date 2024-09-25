@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('insurances', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('short_description')->nullable();
+            $table->string('description')->nullable();
+            $table->string('image')->nullable();
+            $table->string('is_active')->default(1)->comment('1:active, 0:inactive');
             $table->timestamps();
             $table->softDeletes();
         });
