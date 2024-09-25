@@ -75,13 +75,13 @@
                 <ul class="metismenu" id="menu">
 
                     <li>
-                        <a href="index.html">
+                        <a href="{{route('admin.dashboard')}}">
                             <i class=" mdi mdi-view-dashboard"></i>
                             <span class="nav-text">Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="index.html">
+                        <a href="javascript:void(0)">
                             <i class=" mdi mdi-view-dashboard"></i>
                             <span class="nav-text">Hospitals</span>
                         </a>
@@ -93,9 +93,15 @@
                         </a>
                     </li>
                     <li>
-                        <a href="index.html">
+                        <a href="javascript:void(0)">
                             <i class=" mdi mdi-view-dashboard"></i>
                             <span class="nav-text">Blogs</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('admin.contact-us.index')}}">
+                            <i class=" mdi mdi-view-dashboard"></i>
+                            <span class="nav-text">Contact us</span>
                         </a>
                     </li>
 

@@ -26,8 +26,8 @@
                             <form id="myForm" method="POST" action="{{route('admin.departments.update',$department->id)}}" enctype="multipart/form-data">
                             @method("PUT")
                             @else
-                            <form id="myForm" method="POST" action="{{route('admin.departments.store',)}}" enctype="multipart/form-data">
-                            @method("PUT")
+                            <form id="myForm" method="POST" action="{{route('admin.departments.store')}}" enctype="multipart/form-data">
+                            @method("POST")
                             @endif
                                 @csrf
                                 <div class="form-group">

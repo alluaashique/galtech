@@ -6,6 +6,7 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\ContactusController;
 
 
 use App\Http\Controllers\ProfileController;
@@ -38,6 +39,12 @@ Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(f
     Route::put('/departments/{department}', [DepartmentController::class, 'update'])->name('departments.update');
     Route::delete('/departments/{department}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
 
+    Route::get('/contact-us', [ContactusController::class, 'index'])->name('contact-us.index');
+    Route::get('/contact-us/create', [ContactusController::class, 'create'])->name('contact-us.create');
+    Route::post('/contact-us', [ContactusController::class, 'store'])->name('contact-us.store');
+    Route::get('/contact-us/{department}/edit', [ContactusController::class, 'edit'])->name('contact-us.edit');
+    Route::put('/contact-us/{department}', [ContactusController::class, 'update'])->name('contact-us.update');
+    Route::delete('/contact-us/{department}', [ContactusController::class, 'destroy'])->name('contact-us.destroy');
 });
 
 
