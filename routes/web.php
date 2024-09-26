@@ -9,13 +9,17 @@ use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\ContactusController;
 
 
+
+//UserController
+use App\Http\Controllers\User\DepartmentController as UserDepartmentController;
+use App\Http\Controllers\User\ContactusController as UserContactusController;
+use App\Http\Controllers\User\HomeController as UserHomeController;
+
+
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -48,6 +52,10 @@ Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(f
 });
 
 
+
+
+Route::get('/', [UserHomeController::class, 'index'])->name('index');
+Route::get('/departments', [UserDepartmentController::class, 'index'])->name('departments.index');
 
 
 require __DIR__.'/auth.php';

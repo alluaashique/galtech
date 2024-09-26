@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->string('name')->unique();
+            $table->string('slug')->unique();
             $table->string('short_description')->nullable();
             $table->string('description')->nullable();
             $table->string('image')->nullable();

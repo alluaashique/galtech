@@ -9,6 +9,7 @@ use App\Models\Department;
 
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 
 class DepartmentController extends Controller
@@ -56,6 +57,7 @@ class DepartmentController extends Controller
             }
             $departmentSave = Department::create([
                 'name' => $request->departments,
+                'slug' => Str::slug($request->departments),
                 'short_description' => $request->short_description,
                 'description' => $request->description,
                 'image' => $filePath
@@ -122,6 +124,7 @@ class DepartmentController extends Controller
             }
             $departmentSave = Department::findorfail($id)->update([
                 'name' => $request->departments,
+                'slug' => Str::slug($request->departments),
                 'short_description' => $request->short_description,
                 'description' => $request->description,
                 'image' => $filePath
