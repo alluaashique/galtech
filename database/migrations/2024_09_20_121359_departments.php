@@ -15,8 +15,8 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('name')->unique();
             $table->string('slug')->unique();
-            $table->string('short_description')->nullable();
-            $table->string('description')->nullable();
+            $table->longText('short_description')->nullable();
+            $table->longText('description')->nullable();
             $table->string('image')->nullable();
             $table->string('is_active')->default(1)->comment('1:active, 0:inactive');
             $table->timestamps();
