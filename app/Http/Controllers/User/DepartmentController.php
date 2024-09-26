@@ -22,7 +22,7 @@ class DepartmentController extends Controller
         $data['departments'] = Department::when($search, function ($query) use ($search) {
                 return $query->where('name', 'like', '%' . $search . '%');
             })
-            ->paginate(1);
+            ->paginate(10);
         return view('user.departments.departments',$data);
     }
 

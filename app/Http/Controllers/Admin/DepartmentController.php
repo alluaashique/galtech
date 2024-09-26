@@ -58,7 +58,8 @@ class DepartmentController extends Controller
             $departmentSave = Department::create([
                 'name' => $request->departments,
                 'slug' => Str::slug($request->departments),
-                'short_description' => $request->short_description,
+                // 'short_description' => $request->short_description,
+                'short_description' => substring_without_breaking_word($request->description),
                 'description' => $request->description,
                 'image' => $filePath
             ]);
@@ -125,7 +126,8 @@ class DepartmentController extends Controller
             $departmentSave = Department::findorfail($id)->update([
                 'name' => $request->departments,
                 'slug' => Str::slug($request->departments),
-                'short_description' => $request->short_description,
+                // 'short_description' => $request->short_description,
+                'short_description' => $this->substring_without_breaking_word($request->description),
                 'description' => $request->description,
                 'image' => $filePath
             ]);
@@ -163,5 +165,17 @@ class DepartmentController extends Controller
             Toastr::error('Something went wrong.');
             return redirect()->back()->withInput();
         }
+    }
+    function substring_without_breaking_word($text, $max_length = 500) {
+        $text = strip_tags($text);
+        if (strlen($text) <= $max_length) {
+            return $text;
+        }
+        $trimmed = substr($text, 0, $max_length);
+        $last_space = strrpos($trimmed, ' ');
+        if ($last_space !== false) {
+            $trimmed = substr($trimmed, 0, $last_space);
+        }
+        return $trimmed . '...';
     }
 }

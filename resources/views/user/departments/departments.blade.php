@@ -34,9 +34,9 @@
                     <div class="col-xl-8">
                         @foreach ($departments as $department)
                             <div class="blog-4__item mb-80">
-                                <a href="#" class="blog-4__item-thumb mb-10">
+                                {{-- <a href="#" class="blog-4__item-thumb mb-10">
                                     <img src="./assets/imgs/blog-4/blog-4__item-1.jpg" class="img-fluid" alt="image not found">
-                                </a>
+                                </a> --}}
                                 <div class="blog-4__item-content">
                                     <h2 class="title-animation mb-10"><a href="{{route('departments.show', $department->slug)}}">{{$department->name}}</a></h2>
                                     <p class="mb-40">
