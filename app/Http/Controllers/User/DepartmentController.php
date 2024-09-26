@@ -15,9 +15,14 @@ class DepartmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data['departments'] = Department::get();
+        $data['alldepartments'] = Department::select('id','name','slug')->get();
+        $search = $request->search ?? null;
+        $data['departments'] = Department::when($search, function ($query) use ($search) {
+                return $query->where('name', 'like', '%' . $search . '%');
+            })
+            ->paginate(1);
         return view('user.departments.departments',$data);
     }
 
@@ -41,9 +46,12 @@ class DepartmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $slug)
     {
-        //
+        $id = Department::where(['slug' => $slug, 'is_active' => 1])->first()->id ?? 0;
+        $data['department'] = Department::findorfail($id);
+        $data['alldepartments'] = Department::select('id','name','slug')->get();
+        return view('user.departments.show_department',$data);
     }
 
     /**

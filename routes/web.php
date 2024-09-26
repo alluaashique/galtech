@@ -56,6 +56,7 @@ Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(f
 
 Route::get('/', [UserHomeController::class, 'index'])->name('index');
 Route::get('/departments', [UserDepartmentController::class, 'index'])->name('departments.index');
+Route::get('/departments/{department}', [UserDepartmentController::class, 'show'])->name('departments.show');
 
 
 require __DIR__.'/auth.php';
