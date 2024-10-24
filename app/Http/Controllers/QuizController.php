@@ -197,6 +197,10 @@ class QuizController extends Controller
     }
     public function show($quiz_uuid)
     {
+
+        $updateOption = Option::where('id', "!=",0)->update(['is_answered' => false]);
+        $updateQuestion = Question::where('id', "!=",0)->update(['is_answered' => false]);
+
         $quiz = Quiz::with('questions','questions.options')
                     ->where('code', $quiz_uuid)->first();
         // $quiz = Quiz::where('code', $quiz_uuid)->first();
@@ -226,8 +230,8 @@ class QuizController extends Controller
         $userId = $request->userId;
         $quizId = $request->quizId;
         $questionId = $request->questionId;
-        $questionNo = $request->questionNo;
-        $answerId = $request->answerId;
+        $questionNo = (int) $request->questionNo;
+        $answerId = (int) $request->answerId;
 
 
       
@@ -237,55 +241,114 @@ class QuizController extends Controller
         $quiz = Quiz::where('code', $quizId)->first();
         if($quiz)
         {
+            Log::info("aaaaaaa");
             Quiz::where('id', $quiz->id)->update(['is_attended' => true]);
-            $question = Question::where('question_id', $quiz->question_id)
+            $question = Question::where('question_id', $questionId)
                         ->where('quiz_id', $quiz->id)
                         ->first();
             if($question)
             {
+                Log::info("bbbbbbbbbbbb");
+
                 $is_answered = $answerId > 0 ? true : false;
                 $updateOption = Option::where('id', $answerId)
                         ->where('question_id', $question->id)
                         ->where('quiz_id', $quiz->id)
                         ->update(['is_answered' => $is_answered]);
-                if($updateOption)
-                {
+                // if($updateOption)
+                // {
+                    
+                    Log::info("ccccccccccc");
                     $updateQuestion = Question::where('id', $question->id)
                         ->where('quiz_id', $quiz->id)
                         ->update(['is_answered' => true]);                   
-                }
+                // }
             }
         }
 
 
         $quiz = Quiz::with('questions','questions.options')
                     ->where('code', $quizId)->first();
-        $attended_question = Question::where('question_id', $quiz->question_id)
-                    ->where('quiz_id', $quiz->id)
-                    ->where('is_answered', true)
-                    ->count();
-
-        $question = Question::where('quiz_id', $quiz->id)
-                            ->where('is_answered', false)
-                            ->first();
-
-        $options = Option::where('question_id', $question->id)
-                        ->where('quiz_id', $quiz->id)
-                        ->get();
-                        
-            // $quiz = Quiz::where('code', $quiz_uuid)->first();
         if($quiz)
         {
-            $data = [
-                'quiz_uuid' => $quizId,
-                'quiz_name' => $quiz->name,
-                'qn_no' => $attended_question + 1,
-                'qn_total' => $quiz->total_question,
-                'qn' => $question,
-                'qn_options' => $options
-            ];
-            return  $data;
+            $attended_question = Question::where('quiz_id', $quiz->id)
+                    ->where('is_answered', true)
+                    ->count();
+            $question = Question::where('quiz_id', $quiz->id)
+                    ->where('is_answered', false)
+                    ->first();
+            if($question)
+            {
+                $options = Option::where('question_id', $question->id)
+                        ->where('quiz_id', $quiz->id)
+                        ->get();
+                $data = [
+                            'quiz_uuid' => $quizId,
+                            'quiz_name' => $quiz->name,
+                            'qn_no' => $attended_question + 1,
+                            'qn_total' => $quiz->total_question,
+                            'qn' => $question,
+                            'qn_options' => $options,
+                            'is_end' => false
+                        ];
+                return  $data;
+            }
         }
+
+        $data = [
+            'quiz_uuid' => $quizId,
+            'quiz_name' => null,
+            'qn_no' => null,
+            'qn_total' => null,
+            'qn' => null,
+            'qn_options' => null,
+            'is_end' => true
+        ];
+        return  $data;          
+           
+    }
+
+    public function result(Request $request,$quizId)
+    {       
+        $quiz = Quiz::with('questions','questions.options')
+                    ->where('code', $quizId)->first();
+
+        if($quiz)
+        {
+            $right_options = Option::where([
+                            'quiz_id' => $quiz->id,
+                            'is_answered' => true,
+                            'is_correct' => true
+                        ])
+                        ->where('quiz_id', $quiz->id)
+                        ->count();
+            $total_question = $quiz->total_question;
+            $percentage = ($right_options / $total_question) * 100;
+
+            if($percentage < 40)
+                $result = "Fail";
+            else if($percentage >= 40 && $percentage <= 60)
+                $result = "Better";
+            else
+                $result = "Winner";
+
+           
+            // ::where('quiz_id', $quiz->id)->count();
+
+            $quiz->right_anwser = $right_options;
+            $quiz->percentage = $percentage;
+            $quiz->result = $result;
+            $data['quiz'] = $quiz;
+           
+            Log::info("quiz");
+            Log::info($quiz);
+            return view('quiz.result', $data);
+        }
+        else
+        {
+            return redirect()->route('dashboard');
+        }
+
     }
 }
 

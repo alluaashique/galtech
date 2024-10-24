@@ -27,12 +27,11 @@
                     </div>
                     <div id="uwASc8t99RnSCmHg">
                     <div id="Uh2fhbAXy8kQpXS7" style="padding-top:56.25%;transform:rotate(0deg);">
-                        <div id="kLJDsc7yPuFxvNwZ" style="top:0px;left:0px;width:100%;position:absolute;height:100%;">hhhh
+                        <div id="kLJDsc7yPuFxvNwZ" style="top:0px;left:0px;width:100%;position:absolute;height:100%;">
                         <div id="seb2LO7dcoBfD6Vz" style="width:100%;opacity:1.0;height:100%;">
                             <div id="tCmH1L948UEpeOSy" style="transform:scale(1, 1);overflow:hidden;width:100%;height:100%;">
                             <div id="JttD7DS5cFsU4tp9" style="transform:rotate(0deg);top:0%;left:0%;width:100%;position:relative;opacity:1.0;height:100%;">
-                                
-                                ghnfgnf
+                                        <span class="timer"></span>
                             </div>
                             </div>
                         </div>
@@ -234,7 +233,7 @@
             var option_d_id = "{{ $qn_options[3]->id }}";
 
             place_values(quiz_id,question_id,qn_no, question, option_a, option_b, option_c, option_d,option_a_id,option_b_id,option_c_id,option_d_id);
-
+            run_timer();
 
 
             $('.options').click(function(){
@@ -244,7 +243,32 @@
                 var qn_no = $("#qn_no").val();
                 var answer_id = $(this).children().find('.option').data('id');                
                 submit_answer(user_id, quiz_id, question_id, qn_no, answer_id);
-            })
+            });
+
+            function run_timer()
+            {
+                timeLeft = 3;
+                question_id = $("#question_id").val();
+                quiz_id = $("#quiz_id").val();
+                qn_no = $("#qn_no").val();
+                user_id = "{{ Auth::user()->id }}";
+                answer_id = 0; 
+                
+                
+
+                $(".timer").html(timeLeft);
+                let countdown = setInterval(function() {
+                    timeLeft -= 1;
+                    $(".timer").html(timeLeft);
+                    if (timeLeft <= 0) {
+                        clearInterval(countdown);
+                        submit_answer(user_id, quiz_id, question_id, qn_no, answer_id);
+                    } 
+                }, 1000); 
+            }
+
+            
+
 
 
             // class="options"
@@ -286,6 +310,28 @@
                         },
                         success: function (data) {
                             console.log(data);
+                            if(data.is_end == true)
+                            {
+                                window.location.href = "{{ route('quiz.result', ':quiz_uuid') }}".replace(':quiz_uuid', data.quiz_uuid);
+                                
+                            }
+
+                            qn_no = data.qn_no;                            
+                            question = data.qn.question;                            
+                            quiz_id = data.quiz_uuid;                            
+                            question_id = data.qn.question_id;                            
+                            option_a = data.qn_options[0].option;
+                            option_a_id = data.qn_options[0].id;
+                            option_b = data.qn_options[1].option;
+                            option_b_id = data.qn_options[1].id;
+                            option_c = data.qn_options[2].option;
+                            option_c_id = data.qn_options[2].id;
+                            option_d = data.qn_options[3].option;
+                            option_d_id = data.qn_options[3].id;
+
+                            place_values(quiz_id,question_id,qn_no, question, option_a, option_b, option_c, option_d,option_a_id,option_b_id,option_c_id,option_d_id);
+                            run_timer();
+
                         },
                         error: function (data) {
                             console.log(data);
