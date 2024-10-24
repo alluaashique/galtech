@@ -237,6 +237,7 @@ class QuizController extends Controller
         $quiz = Quiz::where('code', $quizId)->first();
         if($quiz)
         {
+            Quiz::where('id', $quiz->id)->update(['is_attended' => true]);
             $question = Question::where('question_id', $quiz->question_id)
                         ->where('quiz_id', $quiz->id)
                         ->first();
@@ -259,29 +260,32 @@ class QuizController extends Controller
 
         $quiz = Quiz::with('questions','questions.options')
                     ->where('code', $quizId)->first();
+        $attended_question = Question::where('question_id', $quiz->question_id)
+                    ->where('quiz_id', $quiz->id)
+                    ->where('is_answered', true)
+                    ->count();
+
+        $question = Question::where('quiz_id', $quiz->id)
+                            ->where('is_answered', false)
+                            ->first();
+
+        $options = Option::where('question_id', $question->id)
+                        ->where('quiz_id', $quiz->id)
+                        ->get();
+                        
             // $quiz = Quiz::where('code', $quiz_uuid)->first();
         if($quiz)
         {
             $data = [
                 'quiz_uuid' => $quizId,
                 'quiz_name' => $quiz->name,
-                'qn_no' => $questionNo + 1,
+                'qn_no' => $attended_question + 1,
                 'qn_total' => $quiz->total_question,
-                'qn' => $quiz->questions()->first(),
-                'qn_options' => $quiz->questions()->first()->options
+                'qn' => $question,
+                'qn_options' => $options
             ];
-            // return  $data;
-            return view('quiz.show', $data);
+            return  $data;
         }
-        // array (
-        //     'userId' => '1',
-        //     'quizId' => 'd3db62c3-29eb-4780-8732-54a10fbe8127',
-        //     'questionId' => '645b69d8f09106226db23564',
-        //     'questionNo' => '1',
-        //     'answerId' => '243',
-        //   )  
-          
-
     }
 }
 
