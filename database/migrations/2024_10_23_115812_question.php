@@ -11,7 +11,9 @@ return new class extends Migration
             $table->bigIncrements('id'); 
             $table->unsignedBigInteger('quiz_id')->references('id')->on('quiz')->onDelete('cascade');
             $table->string('question_id')->nullable();
-            $table->boolean('is_right')->default(false); 
+            $table->text('question')->nullable();
+            $table->boolean('is_answered')->default(false); 
+            $table->boolean('is_correct')->default(false); 
             $table->timestamps(); 
             $table->softDeletes();
         });

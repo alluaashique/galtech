@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('quiz', function (Blueprint $table) {
+        Schema::create('options', function (Blueprint $table) {
+
             $table->bigIncrements('id');
-            $table->string('code')->nullable();
-            $table->string('name')->nullable();
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->boolean('is_attended')->default(false);
-            $table->integer('total_question')->default(15);
-            $table->integer('right_anwser')->default(0);
+            $table->foreignId('quiz_id')->references('id')->on('quiz')->onDelete('cascade');
+            $table->foreignId('question_id')->references('id')->on('questions')->onDelete('cascade');
+            $table->string('option');
+            $table->boolean('is_answered')->default(false);
+            $table->boolean('is_correct')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('quiz');
+        Schema::dropIfExists('options');
     }
 };

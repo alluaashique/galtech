@@ -15,6 +15,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/quiz/create/{slug?}', [QuizController::class, 'create'])->name('quiz.create');
 
     Route::get('/quiz/{slug}', [QuizController::class, 'show'])->name('quiz.show');
+    Route::post('/quiz/answer', [QuizController::class, 'answer'])->name('quiz.answer');
+
+
 
     
 

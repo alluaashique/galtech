@@ -17,21 +17,16 @@ class Quiz extends Model
         'code',
         'name',
         'user_id',
-        'total',
-        'right',
-        'wrong'
+        'is_attended',
+        'total_question',
+        'right_anwser'
     ];
 
     public function questions()
     {
         return $this->hasMany(Question::class, 'quiz_id', 'id');//->where('deleted_at', null);
-    }
-    protected static function booted()
-    {
-        static::saving(function ($model) {
-            $model->wrong = $model->total - $model->right;
-        });
-    }
+    }   
+    
     protected static function boot()
     {
         parent::boot();
